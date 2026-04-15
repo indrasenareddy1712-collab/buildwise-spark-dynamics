@@ -33,7 +33,7 @@ const HeroSection = () => {
           transition={{ duration: 1 }}
           className="absolute inset-0"
         >
-          <img src={slides[current].image} alt={slides[current].label} className="w-full h-full object-cover" />
+          <img src={slides[current].image} alt={slides[current].label} loading="eager" className="w-full h-full object-cover" />
         </motion.div>
       </AnimatePresence>
       <div className="absolute inset-0 dark-overlay" />

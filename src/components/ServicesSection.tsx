@@ -85,7 +85,7 @@ const ServicesSection = () => {
             className="grid md:grid-cols-2 gap-8 items-center"
           >
             <div className="relative rounded-sm overflow-hidden aspect-video">
-              <img src={current.image} alt={current.title} className="w-full h-full object-cover" />
+              <img src={current.image} alt={current.title} loading="lazy" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-dark/40 to-transparent" />
             </div>
             <div>
