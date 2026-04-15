@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -16,12 +16,23 @@ const navLinks = [
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
+  const isActive = (path: string) => {
+    if (path === "/") return location.pathname === "/";
+    return location.pathname.startsWith(path);
+  };
 
   return (
     <header
@@ -49,7 +60,11 @@ const Header = () => {
             <Link
               key={link.path}
               to={link.path}
-              className="text-primary-foreground/80 hover:text-gold text-sm font-medium tracking-wide uppercase transition-colors"
+              className={`text-sm font-medium tracking-wide uppercase transition-colors ${
+                isActive(link.path)
+                  ? "text-gold border-b-2 border-gold pb-1"
+                  : "text-primary-foreground/80 hover:text-gold"
+              }`}
             >
               {link.label}
             </Link>
@@ -62,7 +77,7 @@ const Header = () => {
             9346479152
           </a>
           <Link
-            to="/contact"
+            to="/get-a-quote"
             className="gold-gradient px-6 py-2.5 text-foreground text-sm font-semibold rounded-sm hover:opacity-90 transition-opacity"
           >
             Get a Quote
@@ -90,15 +105,17 @@ const Header = () => {
                 <Link
                   key={link.path}
                   to={link.path}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-primary-foreground/80 hover:text-gold text-base font-medium py-2 transition-colors"
+                  className={`text-base font-medium py-2 transition-colors ${
+                    isActive(link.path)
+                      ? "text-gold"
+                      : "text-primary-foreground/80 hover:text-gold"
+                  }`}
                 >
                   {link.label}
                 </Link>
               ))}
               <Link
-                to="/contact"
-                onClick={() => setMobileOpen(false)}
+                to="/get-a-quote"
                 className="gold-gradient px-6 py-3 text-foreground text-sm font-semibold rounded-sm text-center mt-2"
               >
                 Get a Quote
