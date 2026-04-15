@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import ContactCTA from "@/components/ContactCTA";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import heroResidential from "@/assets/hero-residential.jpg";
 import heroCommercial from "@/assets/hero-commercial.jpg";
 import heroInfrastructure from "@/assets/hero-infrastructure.jpg";
@@ -19,6 +20,11 @@ const projects = [
 
 const ProjectsPage = () => (
   <>
+    <Helmet>
+      <title>Our Projects | BUILDWISE INFRA - Construction Portfolio Telangana</title>
+      <meta name="description" content="Explore BUILDWISE INFRA's portfolio of residential, commercial, and infrastructure projects completed across Telangana and Hyderabad." />
+      <link rel="canonical" href="https://buildwiseinfra.com/projects" />
+    </Helmet>
     <Header />
     <main>
       <section className="pt-32 pb-16 bg-dark text-primary-foreground">
