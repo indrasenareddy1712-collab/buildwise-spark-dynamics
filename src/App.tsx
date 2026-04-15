@@ -18,26 +18,28 @@ import RequestCallModal from "./components/RequestCallModal";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/services/:slug" element={<ServicePage />} />
-          <Route path="/projects" element={<ProjectsPage />} />
-          <Route path="/blog" element={<BlogPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/cost-calculator" element={<CostCalculatorPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <AIChatbot />
-        <RequestCallModal />
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <HelmetProvider>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/services/:slug" element={<ServicePage />} />
+            <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/cost-calculator" element={<CostCalculatorPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <AIChatbot />
+          <RequestCallModal />
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </HelmetProvider>
 );
 
 export default App;
