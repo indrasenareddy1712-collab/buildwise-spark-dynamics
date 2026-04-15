@@ -1,5 +1,4 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -11,30 +10,39 @@ const MAX_MESSAGES = 20;
 const MAX_MESSAGE_LENGTH = 2000;
 const ALLOWED_ROLES = new Set(["user", "assistant"]);
 
+// Simple in-memory rate limiter per IP
+const ipRequests = new Map<string, number[]>();
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX = 15;
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const timestamps = (ipRequests.get(ip) || []).filter(
+    (t) => now - t < RATE_LIMIT_WINDOW_MS
+  );
+  if (timestamps.length >= RATE_LIMIT_MAX) {
+    ipRequests.set(ip, timestamps);
+    return true;
+  }
+  timestamps.push(now);
+  ipRequests.set(ip, timestamps);
+  return false;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS")
     return new Response(null, { headers: corsHeaders });
 
   try {
-    // Authenticate the caller
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
-      return new Response(
-        JSON.stringify({ error: "Authentication required." }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
+    const clientIp =
+      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      req.headers.get("cf-connecting-ip") ||
+      "unknown";
 
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-      global: { headers: { Authorization: authHeader } },
-    });
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) {
+    if (isRateLimited(clientIp)) {
       return new Response(
-        JSON.stringify({ error: "Unauthorized." }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: "Too many requests. Please try again later." }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
@@ -44,14 +52,19 @@ serve(async (req) => {
 
     if (!Array.isArray(messages) || messages.length === 0) {
       return new Response(
-        JSON.stringify({ error: "Invalid request: messages must be a non-empty array." }),
+        JSON.stringify({ error: "Invalid request." }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     // Sanitize: only allow user/assistant roles, limit count and length
     const sanitized = messages
-      .filter((m: any) => m && typeof m.content === "string" && ALLOWED_ROLES.has(m.role))
+      .filter(
+        (m: any) =>
+          m &&
+          typeof m.content === "string" &&
+          ALLOWED_ROLES.has(m.role)
+      )
       .slice(-MAX_MESSAGES)
       .map((m: any) => ({
         role: m.role,
@@ -60,7 +73,7 @@ serve(async (req) => {
 
     if (sanitized.length === 0) {
       return new Response(
-        JSON.stringify({ error: "Invalid request: no valid messages provided." }),
+        JSON.stringify({ error: "Invalid request." }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
