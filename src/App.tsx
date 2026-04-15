@@ -9,7 +9,10 @@ import ServicePage from "./pages/ServicePage";
 import ProjectsPage from "./pages/ProjectsPage";
 import BlogPage from "./pages/BlogPage";
 import ContactPage from "./pages/ContactPage";
+import CostCalculatorPage from "./pages/CostCalculatorPage";
 import NotFound from "./pages/NotFound";
+import AIChatbot from "./components/AIChatbot";
+import RequestCallModal from "./components/RequestCallModal";
 
 const queryClient = new QueryClient();
 
@@ -26,8 +29,11 @@ const App = () => (
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/cost-calculator" element={<CostCalculatorPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <AIChatbot />
+        <RequestCallModal />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
