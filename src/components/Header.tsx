@@ -122,6 +122,15 @@ const Header = () => {
                   {link.label}
                 </Link>
               ))}
+              <a
+                href="https://www.instagram.com/buildwisec?igsh=MW43Z2pzMHJxazdzNg=="
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-primary-foreground/80 hover:text-gold transition-colors py-2"
+              >
+                <Instagram className="w-5 h-5" />
+                Instagram
+              </a>
               <Link
                 to="/get-a-quote"
                 className="gold-gradient px-6 py-3 text-foreground text-sm font-semibold rounded-sm text-center mt-2"
