@@ -76,6 +76,14 @@ const Header = () => {
             <Phone className="w-4 h-4" />
             9346479152
           </a>
+          <a
+            href="https://www.instagram.com/buildwisec?igsh=MW43Z2pzMHJxazdzNg=="
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary-foreground/80 hover:text-gold transition-colors"
+          >
+            <Instagram className="w-5 h-5" />
+          </a>
           <Link
             to="/get-a-quote"
             className="gold-gradient px-6 py-2.5 text-foreground text-sm font-semibold rounded-sm hover:opacity-90 transition-opacity"
