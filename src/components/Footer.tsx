@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin, Instagram } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
 
 const Footer = () => (
   <footer className="bg-dark text-primary-foreground/70">
@@ -40,7 +40,6 @@ const Footer = () => (
             <a href="tel:9346479152" className="flex items-center gap-2 hover:text-gold transition-colors"><Phone className="w-4 h-4 text-gold" />9346479152</a>
             <a href="mailto:buildwiseinfra@yahoo.com" className="flex items-center gap-2 hover:text-gold transition-colors"><Mail className="w-4 h-4 text-gold" />buildwiseinfra@yahoo.com</a>
             <span className="flex items-center gap-2"><MapPin className="w-4 h-4 text-gold" />Telangana, India</span>
-            <a href="https://www.instagram.com/buildwise.infra?igsh=MXJ4MzJkYnR1dDI4MQ==" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-gold transition-colors"><Instagram className="w-4 h-4 text-gold" />Follow us on Instagram</a>
           </div>
         </div>
       </div>
